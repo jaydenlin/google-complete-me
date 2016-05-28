@@ -10,8 +10,7 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    
+  "activationEvents": [  
     "onCommand:extension.googleCompleteMe",
     "*"
   ],
