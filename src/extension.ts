@@ -7,8 +7,9 @@ var path = require('path');
 var _ = require('lodash');
 var fetch = require('node-fetch');
 var parseString = require('xml2js').parseString;
+var disposableProvider;
+var isProviderEnabled = false;
 // this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
@@ -18,47 +19,36 @@ export function activate(context: vscode.ExtensionContext) {
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    // let disposable = vscode.commands.registerCommand('extension.sayHello', () => {
-    //     // The code you place here will be executed every time your command is executed
+    let disposableCommand = vscode.commands.registerTextEditorCommand('extension.googleCompleteMe', (textEditor: any, edit) => {
 
-    //     // Display a message box to the user
-    //     vscode.window.showInformationMessage('Hello World!');
-    // });
-    var completeProvider = new CompleteProvider();
-    var disposable = vscode.languages.registerCompletionItemProvider('*',
-        completeProvider, "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z");
+        if (isProviderEnabled) {
+            isProviderEnabled = false;
+            vscode.window.setStatusBarMessage('Google Complete Me is disabled');
+            Disposable.from(disposableProvider).dispose();
 
-    //context.subscriptions.push(disposable2);
+        } else {
+            isProviderEnabled = true;
+            vscode.window.setStatusBarMessage('Google Complete Me is enabled');
+            var completeProvider = new CompleteProvider();
+            disposableProvider = vscode.languages.registerCompletionItemProvider('*',
+                completeProvider, "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z");
 
-    // let disposable = vscode.commands.registerTextEditorCommand('extension.googleCompleteMe', (textEditor: any, edit) => {
+            let document = textEditor.document;
+            let filepath = document.fileName;
+            let firstSelectEnd = textEditor._selections[0].end;
+            let uri = document.uri;
+            let position = new Position(firstSelectEnd.line, firstSelectEnd.character);
 
+            vscode.commands.executeCommand('vscode.executeCompletionItemProvider', uri, position).then((result: CompletionItem[]) => {
 
-        // var completeProvider = new CompleteProvider();
-    //     vscode.languages.registerCompletionItemProvider('*', completeProvider);
-
-
-    //     let document = textEditor.document;
-    //     let filepath = document.fileName;
-    //     let firstSelectEnd = textEditor._selections[0].end;
-    //     let uri = document.uri;
-    //     let position = new Position(firstSelectEnd.line, firstSelectEnd.character);
-
-    //     vscode.commands.executeCommand('vscode.executeCompletionItemProvider', uri, position).then((result: CompletionItem[]) => {
-    // 		console.log(result);
-    //         //Disposable.from(r1).dispose();
-
-    // 	});
+            });
 
 
+        }
 
-    //     //     // Display a message box to the user
+    });
 
-    //     //     // context.subscriptions.push(disposable2);
-    // });
-
-
-
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(disposableCommand);
 
 
 }
@@ -71,14 +61,9 @@ class CompleteProvider implements vscode.CompletionItemProvider {
     provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Thenable<vscode.CompletionItem[]> {
         const lineAt = document.lineAt(position);
         const lineText = document.getText(lineAt.range);
-        console.log(position);
 
         return new Promise((resolve, reject) => {
             var userQuery = getUserKeyIn(lineText, position);
-
-            if (userQuery === "") {
-                reject();
-            }
 
             fetch('http://suggestqueries.google.com/complete/search?output=toolbar&hl=en&q=' + getUserKeyIn(lineText, position))
                 .then(function (res) {
@@ -87,7 +72,7 @@ class CompleteProvider implements vscode.CompletionItemProvider {
                     parseString(body, function (err, result) {
 
                         if (err) {
-                            vscode.window.showInformationMessage('Google Autocomplte API is not available');
+                            vscode.window.showInformationMessage('Google Autocomplte API is not available for the query');
                             reject(err);
                         } else {
                             if (typeof _.get(result, "toplevel.CompleteSuggestion") === "undefined") {
@@ -101,7 +86,6 @@ class CompleteProvider implements vscode.CompletionItemProvider {
                             }
 
                         }
-
 
                     });
 
