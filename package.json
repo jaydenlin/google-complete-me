@@ -11,18 +11,12 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.sayHello",
+    
     "onCommand:extension.googleCompleteMe",
     "*"
   ],
   "main": "./out/src/extension",
   "contributes": {
-    "commands": [
-      {
-        "command": "extension.sayHello",
-        "title": "Hello World"
-      }
-    ],
     "keybindings": [
       {
         "command": "extension.googleCompleteMe",
