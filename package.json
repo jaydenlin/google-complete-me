@@ -2,14 +2,23 @@
   "name": "google-complete-me",
   "displayName": "google-complete-me",
   "description": "google-complete-me",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "publisher": "jaydenlin",
   "engines": {
     "vscode": "^1.0.0"
   },
+  "icon": "images/icon.png",
   "categories": [
-    "Productivity"
+    "Productivity","Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaydenlin/google-complete-me"
+  },
+  "galleryBanner": {
+    "color": "#1e415e",
+    "theme": "dark"
+  },
   "activationEvents": [  
     "onCommand:extension.googleCompleteMe",
     "*"
