@@ -2,13 +2,13 @@
   "name": "google-complete-me",
   "displayName": "google-complete-me",
   "description": "google-complete-me",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "jaydenlin",
   "engines": {
     "vscode": "^1.0.0"
   },
   "categories": [
-    "Other"
+    "Productivity"
   ],
   "activationEvents": [  
     "onCommand:extension.googleCompleteMe",
