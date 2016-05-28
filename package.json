@@ -2,7 +2,7 @@
   "name": "google-complete-me",
   "displayName": "google-complete-me",
   "description": "google-complete-me",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "publisher": "jaydenlin",
   "engines": {
     "vscode": "^1.0.0"
