@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
     let disposableCommand = vscode.commands.registerTextEditorCommand('extension.googleCompleteMe', (textEditor: any, edit) => {
 
         if (isProviderEnabled) {
-            
+
             isProviderEnabled = false;
             vscode.window.setStatusBarMessage('Google Complete Me is disabled');
             vscode.Disposable.from(disposableProvider).dispose();
@@ -39,7 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
             let uri = document.uri;
             let position = new vscode.Position(firstSelectEnd.line, firstSelectEnd.character);
 
-            vscode.commands.executeCommand('vscode.executeCompletionItemProvider', uri, position).then((result: vscode.CompletionItem[]) => {});
+            vscode.commands.executeCommand('vscode.executeCompletionItemProvider', uri, position).then((result: vscode.CompletionItem[]) => { });
 
         }
 
@@ -58,37 +58,42 @@ class CompleteProvider implements vscode.CompletionItemProvider {
     provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Thenable<vscode.CompletionItem[]> {
         const lineAt = document.lineAt(position);
         const lineText = document.getText(lineAt.range);
+        let userQuery = getUserKeyIn(lineText, position);
+        
+        //Case 1. user Query is not empty
+        if (userQuery !== '') {
+            return new Promise((resolve, reject) => {
+                fetch('http://suggestqueries.google.com/complete/search?output=toolbar&hl=en&q=' + getUserKeyIn(lineText, position))
+                    .then(function (res) {
+                        return res.text();
+                    }).then(function (body) {
+                        parseString(body, function (err, result) {
 
-        return new Promise((resolve, reject) => {
-            var userQuery = getUserKeyIn(lineText, position);
-            fetch('http://suggestqueries.google.com/complete/search?output=toolbar&hl=en&q=' + getUserKeyIn(lineText, position))
-                .then(function (res) {
-                    return res.text();
-                }).then(function (body) {
-                    parseString(body, function (err, result) {
-
-                        if (err) {
-                            //Case 1. API Not Available
-                            vscode.window.showInformationMessage('Google Autocomplte API is not available for the query');
-                            reject(err);
-                        } else {
-                            //Case 2. API Has No Suggestion Word
-                            if (typeof _.get(result, 'toplevel.CompleteSuggestion') === 'undefined') {
-                                reject();
+                            if (err) {
+                                //Case 2. API Not Available
+                                vscode.window.showInformationMessage('Google Autocomplte API is not available for the query');
+                                reject(err);
                             } else {
-                                //Case 3. API Has Suggestions
-                                var items = result.toplevel.CompleteSuggestion.map((item) => {
-                                    return new vscode.CompletionItem(item.suggestion[0]['$'].data);
-                                });
-                                resolve(items);
+                                //Case 3. API Has No Suggestion Word
+                                if (typeof _.get(result, 'toplevel.CompleteSuggestion') === 'undefined') {
+                                    reject();
+                                } else {
+                                    //Case 4. API Has Suggestions
+                                    var items = result.toplevel.CompleteSuggestion.map((item) => {
+                                        return new vscode.CompletionItem(item.suggestion[0]['$'].data);
+                                    });
+                                    resolve(items);
+                                }
+
                             }
 
-                        }
+                        });
 
                     });
 
-                });
-        });
+
+            });
+        }
 
     }
 }
