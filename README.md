@@ -1,13 +1,29 @@
-# README
-## This is the README for your extension "google-complete-me"
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
+# Google-Complete-Me
 
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
+> An Extension That Provides `Google AutoComplete Support` in [Visual Studio Code](https://code.visualstudio.com/)!
 
-### For more information
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+```
+ext install google-complete-me
+```
+## Usage
+* `Enable` Google AutoComplete Support 
+
+    After Installation, press `cmd+shift+i` to enable it.  
+    Check the Status Bar below to see whether the extension is enabled.
+
+* `Disable` Google AutoComplete Support 
+
+    After Enable it, press `cmd+shift+i` again to disable it.  
+    Check the Status Bar below to see whether the extension is disabled.
+
+## Demo
+* `Enable` Google AutoComplete Support   
+![IDE](http://i.giphy.com/3oD3Yzrwjb2TSbjdzW.gif) 
+
+* `Disable` Google AutoComplete Support  
+![IDE](http://i.giphy.com/3o6Ei2ZCw0dkUexda8.gif)
+
+## Issues
+Please submit issues to [google-complete-me](https://github.com/jaydenlin/google-complete-me)
 
 **Enjoy!**
