@@ -2,7 +2,7 @@
   "name": "google-complete-me",
   "displayName": "Google Complete Me",
   "description": "Auto-completion using Google Suggestion API, enable the suggestions whenever you need",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "jaydenlin",
   "engines": {
     "vscode": "^1.0.0"
