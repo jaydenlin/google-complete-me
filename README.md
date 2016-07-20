@@ -1,6 +1,6 @@
-# Google-Complete-Me
+# [Google-Complete-Me](https://github.com/jaydenlin/google-complete-me)
 
-> An Extension That Provides `Google Suggestion API Support` in [Visual Studio Code](https://code.visualstudio.com/)!
+> An extension that provides `Google Suggestion API Support` in [Visual Studio Code](https://code.visualstudio.com/)!
 
 ```
 ext install google-complete-me
