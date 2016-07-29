@@ -71,7 +71,7 @@ class CompleteProvider implements vscode.CompletionItemProvider {
 
                             if (err) {
                                 //Case 2. API Not Available
-                                vscode.window.showInformationMessage('Google Autocomplte API is not available for the query');
+                                vscode.window.showInformationMessage('Google Autocomplete API is not available for this query');
                                 reject(err);
                             } else {
                                 //Case 3. API Has No Suggestion Word
